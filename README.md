@@ -1,2 +1,2 @@
 # Cap_project
-Team Members: , , Nico Bautista-Libreros
+Team Members: Camren Henderson, Mackayla Dangleben, Nico Bautista-Libreros
