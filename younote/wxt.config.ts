@@ -11,6 +11,9 @@ export default defineConfig({
     name: 'youNote',
     description: 'A social note taking tool for YouTube.',
     version: '1.0.0',
+    permissions:['identity','storage'],
+    host_permissions: ['https://*.supabase.co/*'],
+    
 
   }
 
