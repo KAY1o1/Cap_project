@@ -1,18 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 
 export default function Sidebar() {
-  const [loggedIn] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
+  const loggedIn = email !== null;
+
+  // Restore an existing session, and react when login completes in another tab.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setEmail(session?.user.email ?? null);
+    });
+    return () => sub.subscription.unsubscribe();
+  }, []);
 
   async function login() {
-    console.log("Starting Google login...");
-  
+    // Open Google in a real browser tab — it blocks login inside the extension popup.
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
+      options: { redirectTo: "https://www.youtube.com/", skipBrowserRedirect: true },
     });
-  
-    console.log("Data:", data);
-    console.log("Error:", error);
+    if (error || !data?.url) {
+      console.error("Login failed:", error?.message);
+      return;
+    }
+    window.open(data.url, "_blank");
   }
 
   return (
@@ -46,6 +58,8 @@ export default function Sidebar() {
         </>
       ) : (
         <>
+          <p style={{ fontSize: "12px", color: "#555" }}>Signed in as {email}</p>
+
           <textarea
             placeholder="Write a note..."
             style={{
