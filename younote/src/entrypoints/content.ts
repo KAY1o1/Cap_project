@@ -1,5 +1,5 @@
 export default defineContentScript({
-    matches: ['https://www.youtube.com/'],
+    matches: ['*://*.youtube.com/*'],
     main(ctx){
         console.log('Welcome to younote!');
     },

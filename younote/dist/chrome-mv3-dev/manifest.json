@@ -19,7 +19,7 @@
     "default_popup": "popup.html"
   },
   "host_permissions": [
-    "https://www.youtube.com/",
+    "*://*.youtube.com/*",
     "http://localhost/*"
   ],
   "content_security_policy": {
