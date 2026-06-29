@@ -6,7 +6,6 @@ export default defineConfig({
   modulesDir: 'wxt-modules',
   outDir: 'dist',
   publicDir: 'static',
-  entrypointsDir: 'entries',
 
   manifest:{
     name: 'youNote',
