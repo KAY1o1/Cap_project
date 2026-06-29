@@ -18,14 +18,14 @@ function App() {
       </label>
 
       <label className="setting">
-        <span>Auto-save</span>
+        <span>Setting 2</span>
         <input
           type="checkbox"
         />
       </label>
 
       <label className="setting">
-        <span>Show timestamps</span>
+        <span>Setting 3</span>
         <input
           type="checkbox"
         />
