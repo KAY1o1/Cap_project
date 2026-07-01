@@ -7,11 +7,30 @@ export default function Sidebar() {
 
   // Restore an existing session, and react when login completes in another tab.
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setEmail(data.session?.user.email ?? null));
+    const refresh = () =>
+      supabase.auth
+        .getSession()
+        .then(({ data }) => setEmail(data.session?.user.email ?? null));
+
+    refresh();
+
     const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
       setEmail(session?.user.email ?? null);
     });
-    return () => sub.subscription.unsubscribe();
+
+    // Google login completes in the separate tab we open for it, so the session
+    // is written there — not in this tab. onAuthStateChange doesn't reliably
+    // fire across tabs in a content script, so when the user switches back to
+    // this tab we re-read the session from storage to reflect that login.
+    const onVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      sub.subscription.unsubscribe();
+      document.removeEventListener("visibilitychange", onVisible);
+    };
   }, []);
 
   async function login() {
